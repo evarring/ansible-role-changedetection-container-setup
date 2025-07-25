@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: MIT-0
+---
+# tasks file for changedetection_container_setup
+
+- name: Ensure changedetection container volume directories exist
+  ansible.builtin.file:
+    path: "{{ item }}"
+    state: directory
+    mode: '0744'
+    owner: "{{ ansible_user | default(root) }}"
+    group: "{{ ansible_user | default(root) }}"
+  loop:
+    - "{{ changedetection_container_setup_dir }}"
+  become: true
+
+- name: Create networks
+  community.docker.docker_network:
+    name: "{{ item.name }}"
+  loop: "{{ changedetection_container_setup_networks }}"
+  become: true
+
+- name: Create changedetection container
+  community.docker.docker_container:
+    name: "{{ changedetection_container_setup_name }}"
+    image: "{{ changedetection_container_setup_image }}"
+    state: "{{ changedetection_container_setup_state | default('started') }}"
+    network_mode: "{{ changedetection_container_setup_network_mode }}"
+    networks: "{{ changedetection_container_setup_networks }}"
+    healthcheck: "{{ changedetection_container_setup_healthcheck | default(omit) }}"
+    recreate: "{{ changedetection_container_setup_recreate }}"
+    privileged: "{{ changedetection_container_setup_privileged }}"
+    ports: "{{ changedetection_container_setup_ports }}"
+    volumes:
+      - "{{ changedetection_container_setup_dir }}:/datastore:rw,Z"
+    env: "{{ changedetection_container_setup_env }}"
+    labels: "{{ changedetection_container_setup_labels }}"
+    restart_policy: "{{ changedetection_container_setup_restart_policy }}"
+
+- name: Enable linger for user {{ ansible_user | default('root') }}
+  ansible.builtin.command:
+    argv:
+      - /usr/bin/loginctl
+      - enable-linger
+      - "{{ ansible_user | default('root') }}"
+    creates: "/var/lib/systemd/linger/{{ ansible_user | default('root') }}"
+  become: true
+  when: ansible_virtualization_type != "container"
