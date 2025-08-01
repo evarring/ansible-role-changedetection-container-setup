@@ -50,6 +50,8 @@
     state: "{{ changedetection_container_setup_state | default('started') }}"
     network_mode: "{{ changedetection_container_setup_network_mode }}"
     networks: "{{ changedetection_container_setup_networks }}"
+    cpus: "{{ changedetection_container_setup_cpus }}"
+    memory: "{{ changedetection_container_setup_memory }}"
     healthcheck: "{{ changedetection_container_setup_healthcheck | default(omit) }}"
     recreate: "{{ changedetection_container_setup_recreate }}"
     privileged: "{{ changedetection_container_setup_privileged }}"

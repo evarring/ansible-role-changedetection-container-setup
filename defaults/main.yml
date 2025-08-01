@@ -14,6 +14,10 @@ changedetection_container_setup_recreate: false
 changedetection_container_setup_privileged: false
 changedetection_container_setup_ports:
   - "5000:5000"
+
+changedetection_container_setup_cpus: 0.5
+changedetection_container_setup_memory: 256M
+ 
 changedetection_container_setup_restart_policy: unless-stopped
 
 changedetection_container_setup_labels:
