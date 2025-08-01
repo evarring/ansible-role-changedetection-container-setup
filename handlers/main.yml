@@ -1,3 +1,12 @@
 # SPDX-License-Identifier: MIT-0
 ---
 # handlers file for changedetection_container_setup
+
+- name: Stop container
+  community.docker.docker_container:
+    name: "{{ changedetectionname_item }}"
+    state: "stopped"
+  loop:
+    - "{{ changedetection_container_setup_name }}"
+  loop_control:
+    loop_var: changedetectionname_item

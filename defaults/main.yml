@@ -10,7 +10,7 @@ changedetection_container_setup_networks:
 
 changedetection_container_setup_image: dgtlmoon/changedetection.io:latest
 changedetection_container_setup_dir: /srv/changedetection
-changedetection_container_setup_recreate: true
+changedetection_container_setup_recreate: false
 changedetection_container_setup_privileged: false
 changedetection_container_setup_ports:
   - "5000:5000"
